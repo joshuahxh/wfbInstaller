@@ -149,9 +149,29 @@ Signed-in users can click **Open** to retrieve any previous design saved to thei
 
 ## Installing Watch Faces on Your Garmin Device
 
-This is one of the most frequently asked questions in the community. There are several methods:
+This is one of the most frequently asked questions in the community. The **recommended** path is the dedicated `wfbInstaller` desktop app — it works the same on Windows, Linux, and macOS, handles the file-system layout for you, and removes the need to mount the watch as a drive (which is especially useful on modern macOS, where Android File Transfer is no longer available). Manual USB sideloading and ConnectIQ-store publishing are covered below as alternatives.
 
-### Method 1: Direct USB Sideloading (Most Common)
+### Method 1: wfbInstaller (Recommended)
+
+`wfbInstaller` is the open-source companion app maintained at [github.com/joshuahxh/wfbInstaller](https://github.com/joshuahxh/wfbInstaller). It is the default way to put a WFB watch face on your device.
+
+1. Grab the binary for your OS from the [latest release](https://github.com/joshuahxh/wfbInstaller/releases/latest):
+   - **Windows (64-bit):** `wfbinstaller-windows-x64.exe`
+   - **Linux (x86_64):** `wfbinstaller-linux-x64`
+   - **macOS (Apple Silicon):** `wfbinstaller-macos-arm64`
+   - **macOS (Intel):** `wfbinstaller-macos-x64`
+2. On Linux/macOS, mark it executable: `chmod +x wfbinstaller-*` (Windows users can just double-click the `.exe`).
+3. Connect your Garmin watch via USB.
+4. Run the app. When it prompts for input you can:
+   - Paste a WFB watch-face URL (e.g. `https://garmin.watchfacebuilder.com/watchface/12345/`) — the app downloads, unzips, and installs in one step, or
+   - Provide the path to a `.zip`, `.prg`, or `.set` file you already downloaded.
+5. Press Enter. The app finds the connected Garmin device, copies the `.prg` (or `.set`) into the correct directory (`GARMIN/Apps/…`), and reports success.
+
+No Python or extra dependencies are required — the binaries are self-contained.
+
+### Method 2: Direct USB Sideloading (Manual)
+
+If you prefer a fully manual install, or your environment can't run the `wfbInstaller` binary:
 
 1. Connect your Garmin watch to your computer via USB cable.
 2. Your watch should appear as a removable drive.
@@ -164,13 +184,6 @@ This is one of the most frequently asked questions in the community. There are s
 - After a recent Garmin firmware update, `.prg` files only work on the specific device model they were built for. Always select the correct device in the Builder.
 - **⚠️ ".PRG file disappeared" — this is the #1 most common question.** After disconnecting, `.prg` files will vanish from the `GARMIN/Apps` folder when you reconnect via USB. **This is completely normal.** Garmin's firmware moves them internally after installation. Your watch face is still installed — long-press the menu button, go to **Watch Face**, and scroll through to find it. Do not keep re-copying the file thinking it failed.
 
-### Method 2: WFB Installer App
-
-The WFB Installer (v1.0.3) is a desktop companion app that simplifies the process:
-1. Download and install the WFB Installer from the website.
-2. You can drag the downloaded `.zip` file into the installer, or type the watch face URL.
-3. Press "Enter" and the program copies the app to your connected device.
-
 ### Method 3: ConnectIQ Store (Premium)
 
 1. Export your watch face to a `.iq` file (requires premium membership).
@@ -182,16 +195,16 @@ This is the best method if your watch face uses **App Properties** (user-configu
 
 ### Method 4: Mac Users
 
-Mac users may have difficulty seeing the Garmin device as a drive. Workarounds:
+Modern macOS no longer mounts Garmin watches as a normal drive, and Google's **Android File Transfer** utility — long the standard workaround — has been discontinued and is no longer available for download. The current recommendations:
 
-- **Android File Transfer** — Google's free macOS utility for MTP transfers. This is the option the [official WFB help guide](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/) points users to. Works on many Garmin models, though it is unmaintained and many users have moved on to OpenMTP / MacDroid below.
-- **OpenMTP** — A free, open-source Android/MTP file transfer app for Mac that also works with Garmin devices. However, OpenMTP has **known issues with updating watch faces**: if you send an updated `.prg` to a watch that already has the face installed, the update may not take effect. You may need to delete the existing face from the watch first, disconnect, then reconnect and transfer the new file.
-- **MacDroid** — Another Mac file transfer app that supports MTP connections to Garmin watches. Some users report more reliable transfers with MacDroid.
+- **Use `wfbInstaller` (Method 1)** — this is the recommended Mac flow. It bypasses the "watch doesn't appear as a drive" problem because it talks to the device directly. Use `wfbinstaller-macos-arm64` on Apple Silicon or `wfbinstaller-macos-x64` on Intel Macs.
+- **OpenMTP** — A free, open-source MTP file transfer app for Mac that also works with Garmin devices, if you need filesystem-level access. OpenMTP has **known issues with updating watch faces**: if you send an updated `.prg` to a watch that already has the face installed, the update may not take effect. Workaround: delete the existing face from the watch first, disconnect, then reconnect and transfer the new file.
+- **MacDroid** — Another Mac file transfer app that supports MTP connections to Garmin watches. Some users report more reliable transfers than OpenMTP.
 - **Garmin Express** — Garmin's own desktop app can manage files on some models.
-- **ConnectIQ export** (premium) — The most reliable option for Mac users. Avoids USB transfer entirely by publishing through the Garmin store.
-- **USB cable check** — Make sure your cable supports data transfer (not charge-only).
+- **ConnectIQ export** (premium) — Avoids USB transfer entirely by publishing through the Garmin store; useful when a Mac just refuses to talk to the watch.
+- **USB cable check** — Make sure your cable supports data transfer (not charge-only). A surprising number of "my Mac doesn't see the watch" reports turn out to be charge-only cables.
 
-**Important for Mac users:** Only copy the `.prg` file into `GARMIN/Apps`. Do **not** put the `.zip` file in the Apps folder — the watch cannot read zip archives. Unzip first, then transfer only the `.prg` file.
+**Important for Mac users (manual install only):** Only copy the `.prg` file into `GARMIN/Apps`. Do **not** put the `.zip` file in the Apps folder — the watch cannot read zip archives. Unzip first, then transfer only the `.prg` file. (`wfbInstaller` handles this for you automatically.)
 
 ### How to Delete Watch Faces
 

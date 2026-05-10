@@ -1,12 +1,13 @@
 title: Watchface Builder for Garmin — Wiki & FAQ
 description: Community-maintained wiki and FAQ for Watchface Builder for Garmin (WFB)
-theme: jekyll-theme-cayman
 
-# Hide the docs/ source from the GitHub-Pages-rendered site index
+# No remote theme — the layout in _layouts/default.html and the stylesheet in
+# assets/css/style.css together replicate the look of the official WFB site
+# (dark blue-black background, orange brand accent, system font stack).
+
 exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
 
-# Make every internal .md link "just work" without a .html suffix
 permalink: pretty
