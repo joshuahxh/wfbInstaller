@@ -26,6 +26,9 @@ jobs:
           - os: macos-latest
             artifact_name: wfbinstaller
             asset_name: wfbinstaller-macos-arm64
+          - os: macos-15-intel
+            artifact_name: wfbinstaller
+            asset_name: wfbinstaller-macos-x64
 
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +45,7 @@ jobs:
           sudo apt-get install -y libmtp9 libusb-1.0-0
 
       - name: Install macOS system libraries
-        if: matrix.os == 'macos-latest'
+        if: startsWith(matrix.os, 'macos')
         run: brew install libmtp
 
       - name: Install Python build dependencies
@@ -109,6 +112,7 @@ jobs:
             | Windows (64-bit) | `wfbinstaller-windows-x64.exe` |
             | Linux (x86_64) | `wfbinstaller-linux-x64` |
             | macOS (Apple Silicon) | `wfbinstaller-macos-arm64` |
+            | macOS (Intel) | `wfbinstaller-macos-x64` |
 
             ### Quick start
 
