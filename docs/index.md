@@ -116,6 +116,35 @@ When you start a new design in the Builder, you select your specific Garmin devi
 
 Predefined app properties like "OpenWeatherMap API key" and "Auth. User Name" can be customized. This functionality is being improved within WFB, but in the meantime you can follow community guides on r/watchfacebuilder for workarounds.
 
+### Working with Widgets in the Editor
+
+> Source: [official WFB Help Guide](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/).
+
+- **Select:** left-click a widget, drag a selection box around several, or click the widget's tile in the Widgets panel on the right. Hold **Shift** to add to a selection.
+- **Move:** drag with the mouse, or use the **arrow keys** for 1-pixel nudges. **Shift + arrow** moves in finer increments.
+- **Resize:** drag the resize handles on the widget's corners. Some widgets (text, data fields) are resized through the **font options** in the Widgets panel rather than corner handles.
+- **Rotate:** select a widget — a floating rotate control appears above the object.
+- **Duplicate:** click the **Duplicate** button in the toolbar.
+- **Delete:** click the **Delete** button, or press the `Delete` key.
+- **Alignment:** widgets support three horizontal alignment modes — **Center** (default, content centers on the X position), **Left** (content starts at the X position), and **Right** (content ends at the X position). **Vertical alignment is always centered.**
+
+### The Widgets Panel
+
+The Widgets panel on the right lists every object on the canvas as a tile:
+
+- **Select from a tile** — useful for picking widgets hidden underneath other objects.
+- **Lock icon** — locks a widget so it can only be selected from its tile (prevents accidental drag selection).
+- **Eye icon** — hides/shows the widget on the canvas while you work on layers beneath it. Hiding here is an editor-only convenience and doesn't affect the built watch face.
+
+### Building and Downloading Your Watch Face
+
+When your design is ready, click **Save & Build** in the top right of the editor (also referred to as **Build App** in the official help). WFB compiles your design and offers a download:
+
+- A `.prg` file alone — for designs without app properties.
+- A `.zip` file — when your design includes app properties; unzip and use the `.prg` inside.
+
+Signed-in users can click **Open** to retrieve any previous design saved to their account.
+
 ---
 
 ## Installing Watch Faces on Your Garmin Device
@@ -155,6 +184,7 @@ This is the best method if your watch face uses **App Properties** (user-configu
 
 Mac users may have difficulty seeing the Garmin device as a drive. Workarounds:
 
+- **Android File Transfer** — Google's free macOS utility for MTP transfers. This is the option the [official WFB help guide](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/) points users to. Works on many Garmin models, though it is unmaintained and many users have moved on to OpenMTP / MacDroid below.
 - **OpenMTP** — A free, open-source Android/MTP file transfer app for Mac that also works with Garmin devices. However, OpenMTP has **known issues with updating watch faces**: if you send an updated `.prg` to a watch that already has the face installed, the update may not take effect. You may need to delete the existing face from the watch first, disconnect, then reconnect and transfer the new file.
 - **MacDroid** — Another Mac file transfer app that supports MTP connections to Garmin watches. Some users report more reliable transfers with MacDroid.
 - **Garmin Express** — Garmin's own desktop app can manage files on some models.
@@ -268,6 +298,8 @@ Use math expressions to transform data values:
 - **Unit conversion:** Convert km/m to miles/ft, Celsius to Fahrenheit, etc. using math expressions.
 - **Time calculations:** Calculate time differences, seconds since midnight, countdowns.
 - **Conditional display:** Combine `isnull` checks with math to handle missing data gracefully.
+
+**Example from the official help guide:** `(ds9) - 10` returns the heart rate value from sensor history minus 10. Any data token can be combined with arithmetic operators (`+`, `-`, `*`, `/`), conditional logic (`?:`), comparison operators, and the `isnull()` function described in the Tokens section.
 
 ---
 
@@ -725,7 +757,8 @@ The WFB Builder supports several keyboard and mouse shortcuts to speed up design
 - **How to Remove Sideloaded PRG Files** (pinned post) — Instructions on r/watchfacebuilder for properly removing watch faces installed via USB.
 - **Apps in ConnectIQ Store Created by WFB** (pinned post) — A curated list of watch faces on the Garmin store that were built using WFB, useful for inspiration.
 - **Unofficial Community Wiki (Gitea):** [code.binbash.rocks — WFB Wiki](https://code.binbash.rocks:8443/GarminWatch/watchfacebuilder/wiki) — Detailed community-maintained documentation covering battery optimization, memory optimization, useful functions, ConnectIQ publishing tips, and FAQ.
-- **Official Help Guide:** [garmin.watchfacebuilder.com/garmin-device-app-online-builder-help](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/)
+- **Official Help Guide:** [garmin.watchfacebuilder.com/garmin-device-app-online-builder-help](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/) — Builder UI reference (widgets, palettes, the Widgets panel, math expressions, the Save & Build / Open buttons).
+- **Changelog** — Linked from the top menu on [garmin.watchfacebuilder.com](https://garmin.watchfacebuilder.com). Use this to check whether a recent build issue you're hitting is related to a recent WFB change.
 - **Website:** [garmin.watchfacebuilder.com](https://garmin.watchfacebuilder.com)
 - **Reddit:** [r/watchfacebuilder](https://www.reddit.com/r/watchfacebuilder)
 - **Token Reference:** [garmin.watchfacebuilder.com/tokens](https://garmin.watchfacebuilder.com/tokens)
