@@ -2,6 +2,8 @@
 
 A cross-platform Garmin watchface installer.
 
+📖 **Wiki & FAQ:** https://joshuahxh.github.io/wfbInstaller/ ([edit on GitHub](docs/index.md))
+
 Supports both direct MTP (Media Transfer Protocol) communication via libmtp and standard filesystem-based device access.
 
 ## Features
