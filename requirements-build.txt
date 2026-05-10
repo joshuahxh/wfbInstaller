@@ -1,0 +1,4 @@
+requests==2.31.0
+PyInstaller==6.1.0
+# python-libmtp is optional and platform-specific
+# For Windows builds, it will use filesystem scanning fallback

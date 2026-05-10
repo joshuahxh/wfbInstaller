@@ -1,0 +1,125 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: wfbinstaller.exe
+            asset_name: wfbinstaller-windows-x64.exe
+          - os: ubuntu-latest
+            artifact_name: wfbinstaller
+            asset_name: wfbinstaller-linux-x64
+          - os: macos-latest
+            artifact_name: wfbinstaller
+            asset_name: wfbinstaller-macos-arm64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Linux system libraries
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libmtp9 libusb-1.0-0
+
+      - name: Install macOS system libraries
+        if: matrix.os == 'macos-latest'
+        run: brew install libmtp
+
+      - name: Install Python build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-build.txt
+
+      - name: Build executable
+        run: pyinstaller --noconfirm wfbinstaller.spec
+
+      - name: Rename artifact
+        shell: bash
+        run: |
+          mkdir -p release
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            cp dist/wfbinstaller.exe "release/${{ matrix.asset_name }}"
+          else
+            cp dist/wfbinstaller "release/${{ matrix.asset_name }}"
+            chmod +x "release/${{ matrix.asset_name }}"
+          fi
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset_name }}
+          path: release/${{ matrix.asset_name }}
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Flatten artifacts
+        run: |
+          mkdir -p release
+          find artifacts -type f -exec cp {} release/ \;
+          ls -la release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
+          body: |
+            ## wfbInstaller ${{ github.ref_name }}
+
+            Cross-platform Garmin watchface installer.
+
+            ### Downloads
+
+            Pick the file for your operating system — no Python or dependencies required:
+
+            | Platform | File |
+            |----------|------|
+            | Windows (64-bit) | `wfbinstaller-windows-x64.exe` |
+            | Linux (x86_64) | `wfbinstaller-linux-x64` |
+            | macOS (Apple Silicon) | `wfbinstaller-macos-arm64` |
+
+            ### Quick start
+
+            **Windows:** Download the `.exe`, double-click to run.
+
+            **Linux / macOS:**
+            ```bash
+            chmod +x wfbinstaller-linux-x64   # or the macOS file
+            ./wfbinstaller-linux-x64
+            ```
+
+            On macOS first run, you may need: System Settings → Privacy & Security → "Open anyway".
+
+            See the [README](https://github.com/joshuahxh/wfbInstaller#readme) for usage details.

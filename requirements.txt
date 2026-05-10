@@ -1,0 +1,3 @@
+requests==2.31.0
+# python-libmtp is optional - enables direct MTP device access
+# Fallback: filesystem scanning on /media, /mnt, /
