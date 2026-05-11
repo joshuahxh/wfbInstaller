@@ -9,5 +9,12 @@ exclude:
   - README.md
   - Gemfile
   - Gemfile.lock
+  # Local Reddit research archives + scraper — never publish these to the site.
+  - reddit-joshuahxh-1.html
+  - reddit-joshuahxh-2.html
+  - reddit-main-1.html
+  - watchfacebuilder_comment_archive.jsonl
+  - watchfacebuilder_submission_archive.jsonl
+  - crawler.py
 
 permalink: pretty

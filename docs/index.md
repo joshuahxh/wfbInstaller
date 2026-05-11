@@ -69,9 +69,9 @@ Watchface Builder for Garmin (WFB) is a **free, web-based tool** that lets you d
 
 ### The WFB Interface
 
-- **Home page** — Browse community-created watch faces. You can clone public designs (if the creator allows it) to learn from them or use as a starting point.
+- **Home page** — Browse community-created watch faces. You can clone public designs (if the creator allows it) to learn from them or use as a starting point. Each tile shows **three small access-status icons** at the bottom (orange = on/yes, gray = off/no): the first indicates whether the design is shared, the second whether you can download the `.prg` file, and the third (an "orange pencil" when on) whether you can open it in the Builder and modify it.
 - **Builder** — The main editor where you design your watch face. WFB has both a **new editor** and a **legacy editor**. Some users prefer the legacy editor for its simpler layout. Note: editor settings (such as the watch overlay toggle) may not persist between sessions in the legacy editor — you may need to re-apply your preferences each time you open it. The editor uses a widget-based system — objects can be selected by clicking, dragging a selection box, or clicking the widget tile in the panel. Hold Shift to multi-select. Use Shift+Arrow keys for fine-grained movement.
-- **Installer** — A desktop companion app (v1.0.3) that helps you transfer watch faces to your device.
+- **Installer** — A desktop companion app that helps you transfer watch faces to your device. The recommended cross-platform option today is the open-source [`wfbInstaller`](https://github.com/joshuahxh/wfbInstaller) — see [Method 1 of the install section](#method-1-wfbinstaller-recommended) below.
 - **BMF for Garmin** — The Bitmap Font tool (v2.1.1) for creating custom pixel-perfect fonts.
 - **Tokens page** — A searchable reference of all 679+ data tokens available for use in your designs.
 - **Send API Key** — Where you configure your WFB API key for weather and location data.
@@ -236,6 +236,38 @@ WFB supports **two weather sources**: the built-in WFB weather service (using th
 
 **Known issue:** If a watch face includes OWM weather fields (even if the user selects Garmin weather via an app property), the app may still require an OWM API key. There is currently no way to make OWM fields fully optional at runtime — if the design references OWM tokens, the key is needed. Designers who want to offer both options may need to publish two separate versions of the watch face.
 
+### Setting Up the OWM API Key (PIN Workflow)
+
+When a sideloaded watch face needs an OWM key but doesn't have one yet, it boots into a special **PIN screen** on the watch instead of the normal watch face. The flow is:
+
+1. **On the watch**, the face displays a **4-digit PIN** plus two status lines underneath. Both lines must say **"Yes"** — they confirm the watch has a GPS fix and an internet connection. The PIN rotates every 5 minutes, so don't dawdle.
+2. **On your computer**, open [garmin.watchfacebuilder.com/send-api-key-to-device/](https://garmin.watchfacebuilder.com/send-api-key-to-device/) (also linked as **"Send API Key"** in the WFB site menu).
+3. Select **"Open Weather Map"**, enter the PIN currently shown on the watch, paste your 32-character OWM key from [openweathermap.org](https://openweathermap.org), and click **Submit**.
+4. **Wait.** It takes about **5 minutes** for the key to land on the device, and another **5 minutes** before live weather data appears.
+
+If your OWM-using face never leaves the PIN screen, add a **"Debug Output"** field to your design and rebuild — it shows one of these error strings while the face is running:
+
+| Debug message | Meaning |
+|---|---|
+| (blank) | Everything fine — GPS, key, and quota all valid |
+| `no gps` | The watch can't get a current location. Start an outdoor activity to force a GPS lock, then go back to the watch face. |
+| `invalid key` | The OWM key you sent has a typo or has been deactivated. Re-check on openweathermap.org and resend via the PIN page. |
+| `no data` | OneCall returned no data for your key + location. Rare and usually resolves itself within 30 minutes. |
+| `over quota` | You hit the OWM free-tier limit: **1,000 calls/day, 60 calls/min**. Wait, or upgrade your OWM plan. |
+
+### Setting File Generator (Pre-Loading the OWM Key)
+
+If the PIN workflow above is awkward (e.g. setting up faces in bulk, or for someone else's device), you can pre-bake the OWM key into a `.SET` file that just gets dropped onto the watch:
+
+1. Go to [Create Setting File for Garmin App](https://garmin.watchfacebuilder.com/create-setting-file-for-garmin-app/) on the WFB site.
+2. Fill in the form (enter your OWM API key; optionally enter the app ID of a specific design).
+3. Click **Submit** — you get a `.SET` file back.
+4. Copy the file to `GARMIN/APPS/SETTINGS/` on the watch.
+
+If you provided an app ID, the file is named `<appid>.SET` and pre-pairs with that specific watch face. If you didn't, you get a generic name — copy and rename to match each app ID you want to use it with. One generated file can be reused across any number of GWF apps as long as it's renamed appropriately.
+
+`wfbInstaller` (Method 1 in the install section) also handles `.SET` files automatically — drop one in and it places the file in the right directory.
+
 ### Common API Key Issues
 
 - **"Missing API Key" on watch** — You need to send the API key to your watch via the Send API Key page. This is a separate step after building your watch face. Do not paste the key into the "download instructions" field — use the dedicated **Send API Key** page on the website.
@@ -284,6 +316,27 @@ WFB provides **679+ data tokens** that you can use to display dynamic informatio
 - **Moon phase inaccuracy** — Some users have reported that the moon phase icon or data does not match the actual moon phase. Moon data relies on the WFB API and your device's location/time being correct. Ensure the API key is set up, the phone is synced, and the watch has accurate time and location data. Minor discrepancies (off by a day) can occur depending on when the data was last refreshed.
 - **Weather forecast (multi-day)** — Displaying a multi-day weather forecast (e.g., 3-day or 5-day forecast) requires using the forecast-specific weather tokens. Each forecast day has its own set of tokens for temperature, conditions, etc. If forecast data appears blank or outdated, it may be because the Garmin Connect app hasn't synced recently or the WFB API key isn't configured. Note that forecast accuracy depends on the underlying weather service (WFB or OWM).
 
+### Useful Time, Timezone, and System Tokens
+
+Some specific tokens that come up a lot in r/watchfacebuilder threads:
+
+| Token | What it returns |
+|---|---|
+| `(tm5)` | Day of week as a number (1–7) — useful as the data field for a `(icn.tm5)` day-of-week icon with min=1, max=7. |
+| `(tm15)` | A `localMoment` object — use inside math expressions for date/time math. |
+| `(tm16)` | A `localMoment` object for current time (use inside expression only — has no direct display value). |
+| `(tm16.1)` | Daylight-saving-time offset in seconds (0 if DST is not active). |
+| `(tm16.2)` | Total timezone offset (timezone offset + DST offset). |
+| `(tm16.3)` | Timezone offset without DST. |
+| `(tm16.4)` | `true` if DST is currently active, `false` otherwise. |
+| `(ds29)` | `1` if the watch is currently in its scheduled **Sleep / DND** period, `0` otherwise. Set the schedule on the watch: hold MENU → **System → Sleep Mode → Schedule**, pick days and hours. Useful for visibility expressions that dim/hide elements while sleeping. |
+| `(ds3)` | Battery level (percentage). |
+| `(ds3.4)` | Battery level at the time of last sample (used for drain-rate math, see Battery section). |
+| `(ds3.5)` | Moment of the previous battery sample. |
+| `(ds9)` | Heart rate from sensor history. |
+| `(icn.tm5)` | Day-of-week icon helper — see `(tm5)` above. |
+| `(gvar_N)` | A program variable (Nth global variable). Useful for toggle/state patterns triggered by press-and-hold; combine with `%2==0` to make a two-state toggle. |
+
 ---
 
 ## Expressions, Visibility & Math
@@ -313,6 +366,44 @@ Use math expressions to transform data values:
 - **Conditional display:** Combine `isnull` checks with math to handle missing data gracefully.
 
 **Example from the official help guide:** `(ds9) - 10` returns the heart rate value from sensor history minus 10. Any data token can be combined with arithmetic operators (`+`, `-`, `*`, `/`), conditional logic (`?:`), comparison operators, and the `isnull()` function described in the Tokens section.
+
+### Expression Syntax Tips
+
+- **Expression checker** — The Builder has an inline expression checker in the expression editor window. It catches most obvious syntax errors before you upload your design to compile. Always resolve red error markers first; don't waste a server round-trip on a typo.
+- **Color expressions** — To make a color change at runtime, **check the checkbox in front of the color input box**, then enter an expression. Range patterns use chained ternaries, e.g.:
+  ```
+  (ds3)>80?0x00ff00:(ds3)>60?0x00aa00:(ds3)>40?0xaaaa00:0xff0000
+  ```
+  Replace the hex values with whatever colors you want at each threshold.
+- **Operator precedence** — `&&` (AND) binds tighter than `||` (OR), so use parentheses when mixing them:
+  ```
+  ((ds1.1)==1 && (icn11)==0) || ((ds1.1)==1 && (icn11)==1)
+  ```
+- **Float vs integer math** — Use `3600.0` (with the decimal), not `3600`, when dividing to convert seconds to hours. Integer division will silently round.
+- **String comparisons** — Prefer `.equal("value")` over `==` for strings. The `!=` operator is unreliable in some contexts; use `!((expression).equal("value"))` for "not equal".
+- **Power-mode dropdown on visibility** — Each object's visibility setting has a power-mode dropdown: **All** (always rendered in the editor preview), **High** (only when previewing high-power mode), and **Low** (only when previewing low-power mode). This is an editor convenience and doesn't replace the runtime visibility expression — both apply.
+
+### Custom Code Data Fields
+
+For things WFB tokens can't express, you can drop a small Monkey C snippet into a **Custom Code** data field. The expression must end with a `return` statement that produces the value the field should display.
+
+Two community-confirmed examples:
+
+**Show the alarm count (or nothing if zero):**
+
+```
+var mySettings = Toybox.System.getDeviceSettings();
+return mySettings.alarmCount > 0 ? mySettings.alarmCount : null;
+```
+
+**Show the notification count:**
+
+```
+var mySettings = Toybox.System.getDeviceSettings();
+return mySettings.notificationCount;
+```
+
+Use `null` as a return value to make the field empty (and trigger any `isnull()` fallbacks). Note that Custom Code fields can't reference WFB tokens directly — they have access to Garmin's [Monkey C / Toybox APIs](https://developer.garmin.com/connect-iq/api-docs/), not WFB's expression engine.
 
 ---
 
@@ -350,9 +441,10 @@ Use math expressions to transform data values:
 - Check **"Layer Object"** to allow an image to appear on top of other objects.
 - Image quality can degrade on lower-resolution devices — design at the exact target resolution.
 
-### Animated GIFs
+### Animated GIFs and Animation Layers
 
 - WFB supports animated GIFs on compatible devices with AMOLED displays.
+- The **Animation Layer** feature (added in v7.3.4) accepts both **animated GIF** files and **video files** as the source. GIF is the format reserved for animation; any other image type is treated as a static image.
 - **GIFs stop animating when the display enters low-power mode.** This is a Garmin limitation, not a WFB issue.
 - Using stacks with GIFs — the image will appear frozen in low-power mode.
 
@@ -368,6 +460,8 @@ WFB includes built-in weather condition icons. Common questions:
 
 - **Icon too faint/thin** — The default weather icon stroke width cannot be adjusted directly. As a workaround, you can use custom icon images instead of the built-in ones, or place a colored background behind the icon to increase contrast.
 - **Changing icon color** — Weather icon colors can be changed in the object properties. If the icon is hard to see, try setting a contrasting background color or using a white/light-colored icon on a dark face.
+- **Stock icons vs custom (SVG/image) icons** — **Stock icons** don't accept a color expression — their color cannot change at runtime — but they are much more battery-efficient. **Custom icons** (an image or an SVG path) can take expressions for stroke and fill color, but cost more CPU. Pick stock when you don't need runtime recoloring; pick custom when you do. Note: an SVG **image** (the whole rendered file) can't be recolored at runtime, but an SVG **path** object exposes stroke and fill color settings that accept expressions.
+- **Stock watch-overlay transparency** — The watch-overlay images shipped with the Garmin SDK are not transparent. If you want a transparent overlay, export the PNG and edit the alpha channel in an external image editor (Photoshop, GIMP, etc.). The dev's previous transparency patches have been overwritten by SDK updates, so the non-transparent stock overlays are the current state.
 
 ---
 
@@ -385,9 +479,22 @@ App Properties are user-configurable settings that appear in the Garmin Connect 
 
 ### Important Notes on App Properties
 
-- **App Properties only work when published to ConnectIQ** (premium required). Sideloaded `.prg` files cannot display on-device settings menus. This is the #1 reason to consider premium if your design uses user-configurable options.
-- To create a custom text field that displays a user's name: add a text-type app property, then place a text or data field on the canvas using the `(prop.text_1)` token.
+- **App Properties only work when published to ConnectIQ** (premium required). Sideloaded `.prg` files cannot display on-device settings menus. This is the #1 reason to consider premium if your design uses user-configurable options. The dev has stated they're working on a way to support app-property reads from sideloaded apps too ([v8.3.0 announcement](https://www.reddit.com/r/watchfacebuilder/comments/1703won/version_830_app_properties/)), but as of the latest build only ConnectIQ-published designs read app properties at runtime.
+- **Naming and referencing properties** — Since v8.3.0, you can create app properties under the **Global** section and reference them anywhere with the syntax `(prop.<property_name>)`. The older positional names (`prop.text_1`, `prop.select_4`, etc.) still work for backward compatibility.
+- To create a custom text field that displays a user's name: add a text-type app property, then place a text or data field on the canvas using the `(prop.text_1)` token (or `(prop.<your_name>)` for a named property).
 - Use `(prop.select_X)==N` in visibility expressions to show/hide objects based on the user's dropdown selection.
+
+### Visibility Tied to App Properties — Example
+
+A common pattern for a "user picks how seconds are displayed" setting: add a Select app property with three options (Always / High-power only / Off), then on the seconds field set its visibility expression to:
+
+```
+(prop.select_1)==0                  // Always shown
+(prop.select_1)==1 && (ds1.1)==1    // Visible only in high-power mode
+(prop.select_1)==10                 // Effectively disabled — a value the dropdown never takes
+```
+
+The third line is the trick for "hide entirely": pick a value the dropdown never produces.
 
 ---
 
@@ -427,6 +534,10 @@ Battery life is a major concern for Garmin users. Watch face complexity directly
 During high-power mode the screen updates every second; in low-power mode it updates every minute. Each update involves three steps: (1) computing data values from sensors, (2) drawing objects to the screen buffer, and (3) physically updating pixels. On **MIP screens**, step 3 only uses battery when a pixel actually changes value. On **AMOLED screens** (Epix, Venu), step 3 uses battery whenever a pixel is lit. This is why dark backgrounds save more battery on AMOLED.
 
 Same data fields are not calculated multiple times, but formatting the same value differently and outputting it to multiple locations will consume more battery.
+
+### Draw Order (Bottom Up)
+
+Per the dev: each screen update first **clears** the screen with the global background color, then draws the **merged static-object background image** in one shot, then draws each **dynamic object or code block** one by one from **bottom to top** in the layer panel. After all on-screen drawing finishes, the app checks whether it needs new internet data (OWM weather, WFB API, tides, etc.) and only then fires off the background HTTP request — gated by the **Communication interval** setting. Knowing this is helpful when you want to figure out why one object is appearing on top of another: it's the order in the layer panel, not the order in which you added them.
 
 ### Update Intervals
 
@@ -488,6 +599,13 @@ To check how much memory your watch allows for watch faces:
 
 When drawing an image, the system loads it from storage into memory, draws it, then releases the memory before handling the next object. The bigger the image (width × height), the more memory is needed during this loading phase — even temporarily. This means a single large background image can spike memory usage even if the final drawn result is efficient.
 
+### Hard Limits (Garmin SDK / Monkey C)
+
+These are platform-imposed and not something WFB itself can lift:
+
+- **256 images per app** — Hard cap from the Garmin SDK. Each regular **rotating data field** in WFB pre-renders 60 images (one per 6° step), so each rotating goal field eats 60 image slots. **You cannot have more than 4 such rotating fields** in a single design before you blow the cap. *Workaround:* use the **Rotating Simple Hand** object (under the **Goal** menu — labeled "Rotating Simple Hand"). It renders the hand from an **SVG path** dynamically at runtime, so it counts as 0 toward the 256-image budget. You can pick a predefined shape or paste a custom SVG path string; set stroke width, stroke/fill colors, the rotation angle range (360 for a full circle), and a center offset. Keep the shape simple — every extra path segment costs CPU on every rotation update.
+- **256 local variables per Monkey C function** — Each object on the canvas uses at least one local variable, and objects with visibility expressions use several more. Even when two objects have the **same** visibility expression, the local variables for that evaluation are not shared. Symptom: a stack-overflow or compile error when a design accumulates dozens of similar objects. *Workaround:* simplify or consolidate visibility expressions; reuse a single bitmap-font glyph instead of many similar text/data fields where possible.
+
 ### Memory Optimization Tips
 
 - **Static objects are merged into one background image** at compile time. If that merged image is very large, it takes more memory to load but uses less battery. Converting some static objects to **layer (dynamic) objects** can reduce peak memory usage at the cost of slightly more battery.
@@ -517,6 +635,18 @@ When drawing an image, the system loads it from storage into memory, draws it, t
 - **Easier installation** — Users install directly from the store, no USB cable needed.
 - **Updates** — You can push updates to users who installed your face.
 - **Wider audience** — Share your designs with the Garmin community.
+
+### Multi-Design Export to a Single IQ File
+
+If you maintain several variations of a watch face for different Garmin models, you can merge them into a **single `.iq` file** instead of submitting each one separately ([dev announcement](https://www.reddit.com/r/watchfacebuilder/comments/1dhf5v1/export_multiple_designs_to_iq_with_wfb/)):
+
+1. Open the **Export** link in the left-side menu on the WFB site.
+2. **Select multiple designs** at once (more designs = longer compile time).
+3. WFB lists every device each design can target. If two designs both target the same device, pick which one wins for that device. Uncheck any device you don't want to ship.
+4. Click **Merge** — WFB compiles all selections into one `.iq` file.
+5. Upload that single `.iq` to the [Garmin developer dashboard](https://apps.garmin.com/developer/dashboard).
+
+This is the recommended way to ship one store listing that covers, say, Fenix + Forerunner + Epix variants of the same design.
 
 ### Versioning Tips
 
@@ -553,7 +683,7 @@ If you want to release your watch face in the **EEA region** (European Economic 
 2. Scroll to the Membership section.
 3. Click **Subscribe** to access the subscription page.
 4. New subscribers get a **30-day free trial**.
-5. **PayPal** and credit card payments are accepted.
+5. **Credit card** payments are accepted. PayPal was previously supported but has been **disabled for new premium subscriptions** ([dev announcement](https://www.reddit.com/r/watchfacebuilder/comments/180ypl0/paypal_payment_disabled_for_the_premium/)). If you already subscribed via PayPal, you keep premium access until the end of your current billing period and the subscription will not auto-renew.
 
 ### "Can't Save Without Premium" Confusion
 
@@ -664,6 +794,24 @@ Some features require publishing to the ConnectIQ store (premium):
 - OTA updates for users who installed your face
 - Wider device compatibility testing via simulator
 
+### Developer Roadmap
+
+The dev maintains a public **To-Do** sticky on r/watchfacebuilder ([thread](https://www.reddit.com/r/watchfacebuilder/comments/thi8pr/todo_list/)). Items already shipped (struck through in the latest revision) include: group field, custom data field with formula, design-by-screen-size, Bft wind speed scale, UV-index scale, sun arc, animation layer, and ConnectIQ-store export. Items still on the list at last update:
+
+- Other Connect IQ app types (data field, widget, full app, audio content provider)
+- Rotating arbitrary widgets
+- More internet data feeds (tide, Aurora forecast, calendar)
+- DND mode as a first-class feature (today: use `(ds29)`)
+- Thousand separator formatting
+- Separate Save and Build buttons
+- Pixel-percentage estimation for AOD
+- "Time from last charging" data point
+- Hide-completed-goal field option
+- Custom drawing function
+- Add expression fields to more property surfaces
+
+If you have a feature request, the To-Do thread is where to put it — the dev triages from there.
+
 ---
 
 ## MIP Display Issues
@@ -708,6 +856,21 @@ Since text objects have limited visibility support, use custom bitmap fonts wher
 
 For watch faces published to ConnectIQ, use **app properties** to let users choose which data to display. Create property dropdowns and use visibility expressions to show/hide the appropriate data field objects.
 
+### Hold-to-Launch (Press-and-Hold Complications)
+
+The **Complication** property on any object turns it into a press-and-hold shortcut that launches the user's chosen Connect IQ app:
+
+1. Select the object on the canvas.
+2. In its properties panel, pick a **complication** entry (e.g. `(prop.a1)`).
+3. Optionally tune the **display value** of the object to grow or shrink the press hit-area without changing the visible artwork.
+4. On the watch, **press and hold** the area (~1 second) to launch the selected app. Reminder: this is a press event, not a tap — Garmin doesn't expose tap events to third-party watch faces.
+
+If you want a single hold target shared across multiple visual layers, put a transparent press-target shape on top to absorb the press, and link **only that one** to `(prop.a1)` (see the "Overlapping touch responses" pitfall in the Expressions section).
+
+### Rotating Hands Beyond the 4-Hand Limit
+
+The standard rotating data field renders 60 pre-baked images per hand, so you hit the SDK's 256-image cap at 4 hands. Use the **Rotating Simple Hand** object (Goal menu → Rotating Simple Hand) for any extra hands — it renders dynamically from an SVG path and doesn't count toward the image limit. See [Memory Optimization](#memory-optimization) for the full rundown.
+
 ### Tide Predictions
 
 WFB includes tide prediction tokens. Note that accuracy depends on your location data being current. If tide values seem wrong, ensure the watch has a recent GPS fix and the phone app is synced.
@@ -737,6 +900,36 @@ The `isnull` function is essential for handling missing data gracefully. Common 
 - **Icon color coding:** `isnull((cp23),999)` — use 999 as a "no data" sentinel in group icons
 - **Off-wrist detection via HR:** `(cp18)==null?999:(cp35)` — check HR to determine if PulseOx data is valid
 - Always test isnull behavior on your actual device, as some tokens (like PulseOx) behave differently than expected regarding null states.
+
+### Filling Text with an Image
+
+A neat technique from a [dev post](https://www.reddit.com/r/watchfacebuilder/comments/1139u0z/how_to_fill_text_with_a_image/): make a data field's color **transparent** (click "remove color" on the color field) and place an **image underneath** it. The image becomes visible only where the text glyphs are — effectively "filling" the text with the image. This is the same idea used in WFB's "Dynamic Color Filling" demo, where text appears progressively filled based on goal completion.
+
+### Hiding Elements During Sleep / DND Hours
+
+Use `(ds29)` in visibility expressions to dim or hide elements during the watch's scheduled sleep period (set on the watch via **MENU → System → Sleep Mode → Schedule**). For example, `(ds29)==0` keeps an element visible only outside sleep hours, giving you a poor-man's DND mode without a dedicated app property.
+
+### Two-State Toggle via Program Variable
+
+To make a press-and-hold area toggle a value on/off:
+1. Add a **Program Variable** data field, set its area, and assign a press action that increments the variable (`gvar_1`, etc.).
+2. Use `(gvar_1)%2==0` as the visibility expression on whatever you want to toggle.
+
+Because the press event is on hold (not tap — Garmin doesn't expose tap events to third-party watch faces), it takes about one second to register.
+
+### Day-of-Week Icon
+
+Use `(icn.tm5)` as the data field of an icon stack with **min=1** and **max=7**. Each weekday (`(tm5)` returns 1–7) maps to a different icon in your set.
+
+### Limits on Press / Touch / Sensor Access
+
+A summary of common "can WFB do X?" questions where the answer is "no, Garmin doesn't expose it":
+- **Touch events** — Not available to third-party watch face apps. Only **press and hold** (about a one-second hold) is exposed.
+- **Real-time sensor reads** — A watch face app can only read sensor values at the screen-update tick (1 s in high power, 60 s in low power). There's no streaming/realtime sensor read.
+- **Compass** — The compass sensor is not exposed to watch face apps.
+- **Calendar** — Only the **next** calendar event is accessible. Full-day or multi-event reads aren't available.
+- **Tap-and-hold area sizing** — Adjust the `display value` of the press-target object to make its hit rectangle bigger or smaller than the visible artwork.
+- **Stock Garmin watch faces** can do things third-party faces can't (e.g. realtime sensors, full calendar). The SDK gap is intentional; it's not something WFB can work around.
 
 ---
 
@@ -793,6 +986,6 @@ The WFB Builder supports several keyboard and mouse shortcuts to speed up design
 
 ---
 
-*This wiki was compiled from community discussions on r/watchfacebuilder and the official WFB website. Last updated: May 2026.*
+*This wiki was compiled from community discussions on r/watchfacebuilder (including the developer's sticky posts and Q&A threads) and the official WFB website. Last updated: 2026-05-11.*
 
 *Edit this page on GitHub: [docs/index.md](https://github.com/joshuahxh/wfbInstaller/edit/main/docs/index.md) — pull requests welcome.*

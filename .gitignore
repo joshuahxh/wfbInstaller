@@ -40,3 +40,10 @@ htmlcov/
 
 # Claude Code
 .claude/
+
+# Local reddit research archives + scraper — kept out of git so the Pages site
+# stays small and the personal/community posts aren't republished.
+docs/reddit-*.html
+docs/*.jsonl
+docs/crawler.py
+
