@@ -16,5 +16,8 @@ exclude:
   - watchfacebuilder_comment_archive.jsonl
   - watchfacebuilder_submission_archive.jsonl
   - crawler.py
+  # Local preview tooling — never publish.
+  - _preview.py
+  - _preview.html
 
 permalink: pretty

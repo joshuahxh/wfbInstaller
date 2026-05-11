@@ -47,3 +47,7 @@ docs/reddit-*.html
 docs/*.jsonl
 docs/crawler.py
 
+# Local preview tooling — these live in docs/ for convenience but never ship.
+docs/_preview.py
+docs/_preview.html
+

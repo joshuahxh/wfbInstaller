@@ -15,6 +15,9 @@
         <span class="site-header__brand-mark">WFB</span>
         <span class="site-header__brand-text">Wiki &amp; FAQ</span>
       </a>
+      <button class="site-header__menu-toggle" type="button" aria-label="Toggle table of contents" aria-expanded="false">
+        <span class="site-header__menu-icon"></span>
+      </button>
       <nav class="site-header__nav">
         <a href="https://garmin.watchfacebuilder.com">WFB site</a>
         <a href="https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/">Help guide</a>
@@ -24,12 +27,23 @@
     </div>
   </header>
 
-  <main class="site-main">
-    <article class="page">
-      {% if page.title %}<h1 class="page__title">{{ page.title }}</h1>{% endif %}
-      {{ content }}
-    </article>
-  </main>
+  <div class="site-shell">
+    <aside class="toc" aria-label="On this page">
+      <div class="toc__inner">
+        <p class="toc__heading">On this page</p>
+        <nav class="toc__nav">
+          <ol class="toc__list"></ol>
+        </nav>
+      </div>
+    </aside>
+
+    <main class="site-main">
+      <article class="page">
+        {% if page.title %}<h1 class="page__title">{{ page.title }}</h1>{% endif %}
+        {{ content }}
+      </article>
+    </main>
+  </div>
 
   <footer class="site-footer">
     <div class="site-footer__inner">
@@ -41,5 +55,7 @@
       </p>
     </div>
   </footer>
+
+  <script src="{{ '/assets/js/toc.js' | relative_url }}" defer></script>
 </body>
 </html>

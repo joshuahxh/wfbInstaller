@@ -17,8 +17,10 @@
   --border-strong: rgba(255, 255, 255, 0.14);
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   --font-mono: SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --header-h: 60px;
+  --toc-w: 260px;
   --content-max: 880px;
-  --shell-max: 1080px;
+  --shell-max: 1300px;
 }
 
 * { box-sizing: border-box; }
@@ -53,10 +55,11 @@ a:focus { color: var(--accent-hover); text-decoration: underline; }
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 30;
   background: var(--bg-elevated);
   border-bottom: 1px solid var(--border);
   backdrop-filter: saturate(140%) blur(6px);
+  min-height: var(--header-h);
 }
 
 .site-header__inner {
@@ -66,7 +69,6 @@ a:focus { color: var(--accent-hover); text-decoration: underline; }
   display: flex;
   align-items: center;
   gap: 28px;
-  flex-wrap: wrap;
 }
 
 .site-header__brand {
@@ -117,12 +119,118 @@ a:focus { color: var(--accent-hover); text-decoration: underline; }
   text-decoration: none;
 }
 
+.site-header__menu-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  cursor: pointer;
+  margin-left: auto;
+}
+.site-header__menu-icon,
+.site-header__menu-icon::before,
+.site-header__menu-icon::after {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--text);
+  margin: 4px auto;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.site-header__menu-icon { position: relative; }
+[aria-expanded="true"] .site-header__menu-icon { background: transparent; }
+[aria-expanded="true"] .site-header__menu-icon::before { transform: translateY(6px) rotate(45deg); }
+[aria-expanded="true"] .site-header__menu-icon::after  { transform: translateY(-6px) rotate(-45deg); }
+
+/* ── Two-column shell ─────────────────────────────────────────────────── */
+
+.site-shell {
+  max-width: var(--shell-max);
+  margin: 0 auto;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: var(--toc-w) 1fr;
+  gap: 36px;
+}
+
+/* ── Sidebar Table of Contents ────────────────────────────────────────── */
+
+.toc {
+  position: sticky;
+  top: var(--header-h);
+  align-self: start;
+  height: calc(100vh - var(--header-h));
+  padding: 28px 0;
+  overflow: hidden;
+}
+.toc__inner {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.toc__inner::-webkit-scrollbar { width: 6px; }
+.toc__inner::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+.toc__heading {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+  padding-left: 12px;
+}
+.toc__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 1px solid var(--border);
+}
+.toc__list li { margin: 0; }
+.toc__link {
+  display: block;
+  padding: 6px 12px;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  color: var(--text-muted);
+  font-size: 13.5px;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.toc__link:hover {
+  color: var(--text-strong);
+  text-decoration: none;
+  border-left-color: var(--border-strong);
+}
+.toc__link--active {
+  color: var(--accent);
+  font-weight: 600;
+  border-left-color: var(--accent);
+  background: var(--accent-soft);
+}
+.toc__link--h3 {
+  padding-left: 28px;
+  font-size: 12.5px;
+  opacity: 0.85;
+}
+
+/* When JS has populated the sidebar, hide the in-page ToC duplicate */
+.toc--ready ~ .site-main .page__inline-toc { display: none; }
+
 /* ── Main + article ────────────────────────────────────────────────────── */
 
 .site-main {
   max-width: var(--content-max);
-  margin: 0 auto;
-  padding: 40px 28px 72px;
+  padding: 40px 0 72px;
+  min-width: 0; /* allow grid item to shrink */
 }
 
 .page__title {
@@ -268,15 +376,41 @@ article.page img {
 
 /* ── Responsive ────────────────────────────────────────────────────────── */
 
-@media (max-width: 720px) {
-  .site-header__inner { padding: 12px 18px; gap: 18px; }
-  .site-header__nav { gap: 16px; margin-left: 0; width: 100%; }
-  .site-header__nav a { font-size: 13px; }
-  .site-main { padding: 28px 18px 56px; }
+@media (max-width: 1024px) {
+  :root { --toc-w: 220px; }
+  .site-shell { gap: 28px; }
+}
+
+@media (max-width: 860px) {
+  /* Stack: collapse TOC to a top drawer triggered by the header button */
+  .site-shell {
+    grid-template-columns: 1fr;
+    padding: 0 18px;
+  }
+  .site-header__nav { display: none; }
+  .site-header__menu-toggle { display: inline-block; margin-left: auto; }
+
+  .toc {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    height: auto;
+    max-height: calc(100vh - var(--header-h));
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 18px;
+    z-index: 20;
+    transform: translateY(-110%);
+    transition: transform 0.25s ease;
+  }
+  .toc[data-open="true"] { transform: translateY(0); }
+  .toc__inner { padding-right: 0; }
+
+  .site-main { padding: 24px 0 48px; }
   .page__title { font-size: 28px; }
   article.page h2 { font-size: 21px; margin-top: 40px; }
   article.page h3 { font-size: 17px; }
-  .site-footer__inner { padding: 18px; }
 }
 
 @media (max-width: 480px) {
@@ -284,3 +418,7 @@ article.page img {
   .page__title { font-size: 24px; }
   article.page h2 { font-size: 19px; }
 }
+
+/* When the ToC has been populated by JS, hide the duplicate in-page ToC.
+   The in-page ToC is wrapped in <nav class="page__inline-toc"> by toc.js. */
+.page__inline-toc[hidden] { display: none !important; }
