@@ -174,7 +174,7 @@ No Python or extra dependencies are required — the binaries are self-contained
 If you prefer a fully manual install, or your environment can't run the `wfbInstaller` binary:
 
 1. Connect your Garmin watch to your computer via USB cable.
-2. Your watch should appear as a removable drive.
+2. Your watch should appear as a removable drive (Mass Storage mode) **or** as a Portable Device in *This PC* (MTP mode). On Windows, modern devices like the fenix 6/7/8 default to MTP and have no drive letter — open them by double-clicking the device under *This PC* and you'll see a storage folder containing **GARMIN**. (`wfbInstaller` handles both modes automatically, see Method 1.)
 3. Navigate to the `GARMIN/Apps` folder on the watch.
 4. Copy the downloaded `.prg` file into that folder.
 5. Safely disconnect the watch.

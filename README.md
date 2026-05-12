@@ -21,7 +21,7 @@ Supports both direct MTP (Media Transfer Protocol) communication via libmtp and 
 ### Windows
 - Python 3.7 or later
 - Garmin device connected via USB
-- **Note**: Windows versions require the Garmin device to be mounted as a drive (standard USB Mass Storage mode, not MTP-only mode)
+- **MTP and Mass-Storage both work.** Modern Garmin watches (fenix 6/7/8, Forerunner 2xx/9xx, Epix, etc.) connect via MTP and appear in "This PC" as a *Portable Device* with no drive letter — wfbInstaller talks to those through the Windows Shell API. Older devices that mount as a regular drive letter (e.g. `D:\`) also continue to work.
 
 ### Linux
 - Python 3.7 or later
