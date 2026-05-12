@@ -1,0 +1,23 @@
+title: Watchface Builder for Garmin — Wiki & FAQ
+description: Community-maintained wiki and FAQ for Watchface Builder for Garmin (WFB)
+
+# No remote theme — the layout in _layouts/default.html and the stylesheet in
+# assets/css/style.css together replicate the look of the official WFB site
+# (dark blue-black background, orange brand accent, system font stack).
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  # Local Reddit research archives + scraper — never publish these to the site.
+  - reddit-joshuahxh-1.html
+  - reddit-joshuahxh-2.html
+  - reddit-main-1.html
+  - watchfacebuilder_comment_archive.jsonl
+  - watchfacebuilder_submission_archive.jsonl
+  - crawler.py
+  # Local preview tooling — never publish.
+  - _preview.py
+  - _preview.html
+
+permalink: pretty

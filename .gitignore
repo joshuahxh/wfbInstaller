@@ -1,0 +1,20 @@
+# Build outputs
+dist/
+bin/
+
+# Go workspace noise
+*.test
+*.out
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+
+# Generated docs inputs and previews
+docs/**
+!docs/index.md
+!docs/_config.yml
+!docs/assets/
+!docs/assets/**
+!docs/_layouts/
+!docs/_layouts/**

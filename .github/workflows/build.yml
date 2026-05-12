@@ -1,0 +1,105 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.runs_on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-386
+            runs_on: windows-latest
+            goos: windows
+            goarch: 386
+            artifact: wfbinstaller-windows-386.exe
+            needs_msys2: true
+            pkg_install: false
+            brew_install: false
+          - name: linux-amd64
+            runs_on: ubuntu-latest
+            goos: linux
+            goarch: amd64
+            artifact: wfbinstaller-linux-amd64
+            needs_msys2: false
+            pkg_install: true
+            brew_install: false
+          - name: macos-arm64
+            runs_on: macos-14
+            goos: darwin
+            goarch: arm64
+            artifact: wfbinstaller-darwin-arm64
+            needs_msys2: false
+            pkg_install: false
+            brew_install: true
+          - name: macos-amd64
+            runs_on: macos-13
+            goos: darwin
+            goarch: amd64
+            artifact: wfbinstaller-darwin-amd64
+            needs_msys2: false
+            pkg_install: false
+            brew_install: true
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Set up MSYS2 for Windows 386
+        if: matrix.needs_msys2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          msystem: MINGW32
+          install: >-
+            mingw-w64-i686-gcc
+            mingw-w64-i686-pkgconf
+            mingw-w64-i686-libusb
+
+      - name: Install Linux build dependencies
+        if: matrix.pkg_install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libusb-1.0-0-dev
+
+      - name: Install macOS build dependencies
+        if: matrix.brew_install
+        run: |
+          brew update
+          brew install pkg-config libusb
+
+      - name: Build
+        shell: bash
+        env:
+          CGO_ENABLED: "1"
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CC: ${{ matrix.needs_msys2 && 'C:\msys64\mingw32\bin\gcc.exe' || '' }}
+          PKG_CONFIG: ${{ matrix.needs_msys2 && 'C:\msys64\mingw32\bin\pkg-config.exe' || '' }}
+          PKG_CONFIG_PATH: ${{ matrix.needs_msys2 && 'C:\msys64\mingw32\lib\pkgconfig' || '' }}
+        run: |
+          mkdir -p dist
+          go mod tidy
+          go build -trimpath -o "dist/${{ matrix.artifact }}" .
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: dist/${{ matrix.artifact }}
+          if-no-files-found: error
