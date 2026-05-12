@@ -133,4 +133,4 @@ If the executable reports a missing `libusb` dependency on Linux or macOS, insta
 
 ## Repository
 
-https://github.com/joshuahxh/wfbInstaller.go
+https://github.com/joshuahxh/wfbInstaller
