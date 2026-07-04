@@ -1,5 +1,5 @@
-title: Watchface Builder for Garmin — Wiki & FAQ
-description: Community-maintained wiki and FAQ for Watchface Builder for Garmin (WFB)
+title: Watchface Builder for Garmin — User Manual & FAQ
+description: User manual, wiki and FAQ for Watchface Builder for Garmin (WFB) — the editor, building, installing, tokens, expressions and troubleshooting
 
 # No remote theme — the layout in _layouts/default.html and the stylesheet in
 # assets/css/style.css together replicate the look of the official WFB site

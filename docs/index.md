@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Watchface Builder for Garmin — Wiki & FAQ
-description: Community-maintained wiki and FAQ for Watchface Builder for Garmin (WFB)
+title: Watchface Builder for Garmin — User Manual & FAQ
+description: User manual, wiki and FAQ for Watchface Builder for Garmin (WFB) — the editor, building, installing, tokens, expressions and troubleshooting
 ---
 
-> **Welcome to the official wiki and FAQ for [Watchface Builder for Garmin](https://garmin.watchfacebuilder.com) (WFB).** This guide covers everything from getting started to advanced techniques, compiled from community discussions on [r/watchfacebuilder](https://www.reddit.com/r/watchfacebuilder) and the official website.
+> **Welcome to the user manual and FAQ for [Watchface Builder for Garmin](https://garmin.watchfacebuilder.com) (WFB).** It covers the editor, building and installing watch faces, and advanced techniques — compiled from the official documentation and community discussions on [r/watchfacebuilder](https://www.reddit.com/r/watchfacebuilder).
 >
 > **Developer:** u/joshuahxh-1
 >
@@ -19,25 +19,26 @@ description: Community-maintained wiki and FAQ for Watchface Builder for Garmin 
 1. [What Is Watchface Builder for Garmin?](#what-is-watchface-builder-for-garmin)
 2. [Getting Started](#getting-started)
 3. [Building Your First Watch Face](#building-your-first-watch-face)
-4. [Installing Watch Faces on Your Garmin Device](#installing-watch-faces-on-your-garmin-device)
-5. [API Keys & Weather Data](#api-keys--weather-data)
-6. [Tokens & Data Fields](#tokens--data-fields)
-7. [Expressions, Visibility & Math](#expressions-visibility--math)
-8. [Custom Fonts & Bitmap Fonts (BMF)](#custom-fonts--bitmap-fonts-bmf)
-9. [Images, Icons & Animations](#images-icons--animations)
-10. [App Properties & Custom User Settings](#app-properties--custom-user-settings)
-11. [Language & Localization](#language--localization)
-12. [Battery Life Optimization](#battery-life-optimization)
-13. [Memory Optimization](#memory-optimization)
-14. [Publishing to Garmin Connect IQ](#publishing-to-garmin-connect-iq)
-15. [Premium Membership](#premium-membership)
-16. [Troubleshooting Common Errors](#troubleshooting-common-errors)
-17. [Known Limitations & Quirks](#known-limitations--quirks)
-18. [MIP Display Issues](#mip-display-issues)
-19. [Tips & Advanced Techniques](#tips--advanced-techniques)
-20. [Privacy & Data Policy](#privacy--data-policy)
-21. [Keyboard & Mouse Shortcuts](#keyboard--mouse-shortcuts)
-22. [Community Resources](#community-resources)
+4. [The Editor](#the-editor)
+5. [Installing Watch Faces on Your Garmin Device](#installing-watch-faces-on-your-garmin-device)
+6. [API Keys & Weather Data](#api-keys--weather-data)
+7. [Tokens & Data Fields](#tokens--data-fields)
+8. [Expressions, Visibility & Math](#expressions-visibility--math)
+9. [Custom Fonts & Bitmap Fonts (BMF)](#custom-fonts--bitmap-fonts-bmf)
+10. [Images, Icons & Animations](#images-icons--animations)
+11. [App Properties & Custom User Settings](#app-properties--custom-user-settings)
+12. [Language & Localization](#language--localization)
+13. [Battery Life Optimization](#battery-life-optimization)
+14. [Memory Optimization](#memory-optimization)
+15. [Publishing to Garmin Connect IQ](#publishing-to-garmin-connect-iq)
+16. [Premium Membership](#premium-membership)
+17. [Troubleshooting Common Errors](#troubleshooting-common-errors)
+18. [Known Limitations & Quirks](#known-limitations--quirks)
+19. [MIP Display Issues](#mip-display-issues)
+20. [Tips & Advanced Techniques](#tips--advanced-techniques)
+21. [Privacy & Data Policy](#privacy--data-policy)
+22. [Keyboard & Mouse Shortcuts](#keyboard--mouse-shortcuts)
+23. [Community Resources](#community-resources)
 
 ---
 
@@ -70,7 +71,7 @@ Watchface Builder for Garmin (WFB) is a **free, web-based tool** that lets you d
 ### The WFB Interface
 
 - **Home page** — Browse community-created watch faces. You can clone public designs (if the creator allows it) to learn from them or use as a starting point. Each tile shows **three small access-status icons** at the bottom (orange = on/yes, gray = off/no): the first indicates whether the design is shared, the second whether you can download the `.prg` file, and the third (an "orange pencil" when on) whether you can open it in the Builder and modify it.
-- **Builder** — The main editor where you design your watch face. WFB has both a **new editor** and a **legacy editor**. Some users prefer the legacy editor for its simpler layout. Note: editor settings (such as the watch overlay toggle) may not persist between sessions in the legacy editor — you may need to re-apply your preferences each time you open it. The editor uses a widget-based system — objects can be selected by clicking, dragging a selection box, or clicking the widget tile in the panel. Hold Shift to multi-select. Use Shift+Arrow keys for fine-grained movement.
+- **Builder** — The main editor where you design your watch face. WFB has both a **new editor** and a **legacy editor**; the new editor is the one documented in [The Editor](#the-editor) section below — a task-grouped toolbar (File · Edit · Arrange · View, an ADD palette row, Help and a Build button), Figma-style smart guides, multi-select, a right-click context menu and full keyboard shortcuts (`Shift+?` shows them all). The legacy editor remains available for its simpler layout; note that some editor settings (such as the watch overlay toggle) may not persist between sessions there.
 - **Installer** — A desktop companion app that helps you transfer watch faces to your device. The recommended cross-platform option today is the open-source [`wfbInstaller`](https://github.com/joshuahxh/wfbInstaller) — see [Method 1 of the install section](#method-1-wfbinstaller-recommended) below.
 - **BMF for Garmin** — The Bitmap Font tool (v2.1.1) for creating custom pixel-perfect fonts.
 - **Tokens page** — A searchable reference of all 679+ data tokens available for use in your designs.
@@ -98,10 +99,10 @@ When you start a new design in the Builder, you select your specific Garmin devi
 2. **Add objects** to the canvas — text fields, images, shapes, lines, arcs, and data fields.
 3. **Assign data tokens** to objects to display dynamic information (time, date, heart rate, steps, weather, etc.).
 4. **Style your design** by adjusting position (X, Y), size, colors, and fonts.
-5. **Use the layer panel** to manage object stacking order. Check "Layer Object" on an image to allow it to appear on top of other objects. Objects can be locked (click the Lock icon on a widget tile) to prevent accidental selection, or hidden (click the Eye icon) to work on layers behind them.
-6. **Apply a color palette** (optional) — Click Browse in Global Settings to choose from hundreds of color schemes. Each palette has four variations that change the order colors are applied. You can further customize by dragging the color swatches to rearrange assignments.
-7. **Preview** your design in the editor.
-8. **Click "Generate"** to build the watch face app.
+5. **Use the layer list** (left panel) to manage stacking order — drag rows to reorder, or use Arrange → *Bring forward / Send backward*. Check "Layer Object" on an image to allow it to appear on top of other objects. Objects can be locked (Lock icon on the row) to prevent accidental selection, or hidden (Eye icon) to work on layers behind them.
+6. **Apply a color palette** (optional) — open **File → Editor settings** and click Browse to choose from hundreds of color schemes. Each palette has four variations that change the order colors are applied. You can further customize by dragging the color swatches to rearrange assignments.
+7. **Preview** your design — use the [View menu](#power-modes--data-preview) to check every power mode and extreme data values.
+8. **Click the blue "Build" button** (top right, or `Ctrl+B`) to build the watch face app.
 9. **Download** the `.prg` file (or `.zip` file if it includes app properties).
 
 ### Can I Build Without Premium?
@@ -116,25 +117,26 @@ When you start a new design in the Builder, you select your specific Garmin devi
 
 Predefined app properties like "OpenWeatherMap API key" and "Auth. User Name" can be customized. This functionality is being improved within WFB, but in the meantime you can follow community guides on r/watchfacebuilder for workarounds.
 
-### Working with Widgets in the Editor
+### Working with Objects in the Editor
 
-> Source: [official WFB Help Guide](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/).
+The editor received a major Figma-style overhaul — selection, smart guides, alignment tools, circular layouts, a right-click context menu and a full keyboard-shortcut system. The complete tour lives in [The Editor](#the-editor) section below; the full key list is in [Keyboard & Mouse Shortcuts](#keyboard--mouse-shortcuts). Quick primer:
 
-- **Select:** left-click a widget, drag a selection box around several, or click the widget's tile in the Widgets panel on the right. Hold **Shift** to add to a selection.
-- **Move:** drag with the mouse, or use the **arrow keys** for 1-pixel nudges. **Shift + arrow** moves in finer increments.
-- **Resize:** drag the resize handles on the widget's corners. Some widgets (text, data fields) are resized through the **font options** in the Widgets panel rather than corner handles.
-- **Rotate:** select a widget — a floating rotate control appears above the object.
-- **Duplicate:** click the **Duplicate** button in the toolbar.
-- **Delete:** click the **Delete** button, or press the `Delete` key.
-- **Alignment:** widgets support three horizontal alignment modes — **Center** (default, content centers on the X position), **Left** (content starts at the X position), and **Right** (content ends at the X position). **Vertical alignment is always centered.**
+- **Select:** click an object, drag a selection box on empty canvas, or click its row in the layer list. **Shift+click or Ctrl+click** adds/removes objects; **Shift+drag** adds everything in the box to the current selection.
+- **Move:** drag (smart guides snap to edges, centers, equal spacing and circles), or nudge with the **arrow keys** (1 px) / **Shift+arrow** (10 px).
+- **Resize / rotate:** drag the corner/rotate handles. Text and data fields are sized through their **font size** instead of handles, and data fields intentionally can't be scaled or rotated — even inside a multi-selection.
+- **Duplicate:** `Ctrl+D`, **Alt+drag**, or the right-click menu.
+- **Delete:** `Delete` or `Backspace`.
+- **Alignment property:** widgets support three horizontal alignment modes — **Center** (default, content centers on the X position), **Left** (content starts at the X position), and **Right** (content ends at the X position). **Vertical alignment is always centered.**
 
-### The Widgets Panel
+### The Layer List
 
-The Widgets panel on the right lists every object on the canvas as a tile:
+The panel on the left lists every object on the canvas:
 
-- **Select from a tile** — useful for picking widgets hidden underneath other objects.
-- **Lock icon** — locks a widget so it can only be selected from its tile (prevents accidental drag selection).
-- **Eye icon** — hides/shows the widget on the canvas while you work on layers beneath it. Hiding here is an editor-only convenience and doesn't affect the built watch face.
+- **Select from a row** — useful for picking objects hidden underneath other objects; hovering a row highlights the object on the canvas.
+- **Lock icon** — locks an object so it can only be selected from its row (prevents accidental drag selection).
+- **Eye icon** — hides/shows the object while you work on layers beneath it. Editor-only; doesn't affect the built watch face.
+- **Badges** — a green certificate marks premium data fields, and the orange OWM logo marks fields that need an [OpenWeatherMap API key](#api-keys--weather-data).
+- **Drag rows** to change stacking order; double-click (or the pen icon) to rename.
 
 ### Building and Downloading Your Watch Face
 
@@ -144,6 +146,172 @@ When your design is ready, click **Save & Build** in the top right of the editor
 - A `.zip` file — when your design includes app properties; unzip and use the `.prg` inside.
 
 Signed-in users can click **Open** to retrieve any previous design saved to their account.
+
+---
+
+## The Editor
+
+The Builder's editor works like a modern design tool (Figma/Penpot): direct manipulation on the canvas, smart guides while dragging, a task-grouped toolbar, and keyboard shortcuts for everything. Press **Shift+?** at any time to open the **Keyboard shortcuts & mouse** panel — it opens automatically on your very first visit and stays out of the way after you close it.
+
+![The keyboard shortcuts panel: a tabbed, non-blocking bottom sheet](assets/img/help-overlay.png)
+*The Shift+? panel is non-modal — try shortcuts while it's open.*
+
+### The Workspace
+
+![The editor workspace: toolbar on top, layer list left, canvas with watch overlay center, properties right, status bar bottom](assets/img/editor-overview.png)
+*The editor with the Starter template on a fēnix 8: layer list and History (left), canvas with watch overlay and rulers (center), properties panel (right), status bar (bottom), preview card (bottom-right).*
+
+- **Layer list (left)** — every object on the canvas, front-most on top. Click to select, drag to reorder, double-click (or the pen icon) to rename. Each row has an **eye** (hide while editing — editor-only) and a **lock** (selectable only from its row). Badges mark [premium](#premium-membership) fields (green certificate) and fields that need an [OpenWeatherMap key](#api-keys--weather-data) (orange OWM logo).
+- **Canvas (center)** — the watch screen at the exact pixel resolution of your chosen device, with optional watch-body overlay, grid and rulers.
+- **Properties panel (right)** — settings of the selected object (position, size, colors, font, data source, visibility, update interval…). With a multi-selection it shows the shared properties; mixed types expose the common fields.
+- **Status bar (bottom)** — live readouts and canvas toggles:
+
+  | Item | Shows | Click |
+  |---|---|---|
+  | x, y | cursor position relative to the watch center | — |
+  | size | selection size in pixels | opens a dialog to type exact width / height / angle |
+  | screen | device screen resolution | — |
+  | zoom % | current zoom level | shows / hides the preview card |
+  | Snap · Pixel · Ruler · Grid · Overlay · Clip | canvas aids | toggle |
+
+- **Preview card (bottom-right)** — a live miniature of the whole watchface with your current viewport marked. Drag inside it to pan the editor; the fit button zooms to the watch screen; **×** hides it (the zoom % readout brings it back).
+- **History panel (below the layer list)** — every undoable step by name ("Move", "Align left", "Stack variants"…). Premium members also get the build **Timeline** here to restore earlier built versions.
+
+![The status bar: cursor position, selection size, screen size, zoom, and the six canvas toggles](assets/img/status-bar.png)
+*The status bar. The size readout opens an exact-size dialog; the zoom readout shows/hides the preview card.*
+
+### The Toolbar
+
+![The toolbar: File, Edit, Arrange, View — the ADD palettes — Help and the Build button](assets/img/toolbar.png)
+*Three zones: menus that work on the design, the ADD palettes that put things into it, and Help + the blue Build button.*
+
+| Menu | What's inside |
+|---|---|
+| **File** | Save & Build (`Ctrl+B`), Save snapshot (premium, `Ctrl+S`), App properties, Localization & strings, Fonts, Colors, Editor settings, AOD pixel estimate, Back to gallery |
+| **Edit** | Undo/Redo, Copy/Paste/Duplicate/Delete, Select all |
+| **Arrange** | Align (6 ways), distribute spacing, bring/send layer order, distribute & duplicate around a circle, flip, round position to pixel, variant stacks |
+| **View** | Filter objects by power mode, preview data values (live/longest/shortest), custom visibility expression preview, zoom presets |
+| **Time / Data / Icons / Gauges / Shapes / Images** | The **ADD** palettes — the most-used elements of each kind, ordered by real-world usage across 800+ community designs. Every palette ends with a *Browse all…* entry that opens the full searchable catalog |
+| **Help** | The shortcut panel and links to this wiki |
+| **Build** | The always-visible blue button — same as `Ctrl+B` |
+
+![The File menu](assets/img/menu-file.png)
+*The File menu: build & save, project assets (properties, strings, fonts, colors), editor settings.*
+
+![The Data palette](assets/img/menu-data.png)
+*An ADD palette (Data): the most-used fields grouped by topic, with the full catalog at the bottom.*
+
+### Selecting Objects
+
+| Where | Gesture | Result |
+|---|---|---|
+| Canvas | click | select the object under the cursor |
+| Canvas | `Shift+click` / `Ctrl+click` | add / remove it from the selection |
+| Canvas | drag on empty space | marquee-select everything in the box |
+| Canvas | `Shift+drag` on empty space | marquee **adds** to the current selection |
+| Layer list | click | select (and reveal) the object |
+| Layer list | `Ctrl+click` | add / remove from the selection |
+| Layer list | `Shift+click` | select the whole range between two rows |
+| Anywhere | `Ctrl+A` / `Esc` | select all (visible, unlocked) / deselect |
+
+- Hovering a layer row highlights that object on the canvas — the quickest way to find something buried under other layers.
+- **Locked** objects can only be selected from their layer row; **hidden** objects are skipped by clicks and *Select all*.
+- A multi-selection edits **shared properties** in one go (same-type selections get the full panel, mixed ones the common fields), and the status bar shows the combined size.
+
+![The layer list: dynamic and static object groups, row tools, and the History list below](assets/img/layer-list.png)
+*The layer list groups dynamic and static objects; the row toolbar and the History list sit below.*
+
+### Moving & Snapping
+
+While you drag, the editor snaps to whatever is nearby and draws a guide so you can see *why* it snapped:
+
+| Guide | Meaning |
+|---|---|
+| Red line through edges/centers | your object lines up with another object's edge or center (or the watch center) |
+| Pixel badges between objects | **equal spacing** — drag a middle object to equalize its two gaps, or an outer object to match an existing gap in the row (Penpot-style) |
+| Dashed circle | **ring magnet** — the object's center locked onto the same radius as other objects around the watch center; perfect for dial ticks and complications |
+
+![Dragging the date field with a red smart guide through the watch center](assets/img/smart-guides.png)
+*Mid-drag: the date field captured the watch-center column — the red guide shows why it snapped.*
+
+- Hold **Alt** to bypass all snapping for a precise freehand drag; hold **Shift** to constrain the drag to one axis.
+- **Pixel snapping** (footer toggle) keeps positions on whole pixels; when the **grid** is shown (`G`), drags land on grid lines instead.
+- **Alt+drag** an object to drag out a copy of it.
+
+### Precision & Measurement
+
+- **Arrow keys** nudge 1 px; **Shift+arrows** 10 px.
+- **Alt+hover** shows pixel distances from the current selection to whatever object is under the cursor.
+- **Rulers** (`U`) mark the selection's extent on both axes; the **grid** (`G`) helps eyeball alignment at a glance.
+- Type exact numbers: X/Y in the properties panel, width/height/angle via the **size readout** in the status bar.
+- **Round position to pixel** (Arrange menu or right-click) fixes fractional positions left over from zoomed drags.
+
+### Zoom & Pan
+
+| Action | How |
+|---|---|
+| Zoom at cursor | mouse wheel |
+| Zoom to fit the watch screen | `Shift+1` (or View menu / preview card fit button) |
+| Zoom to selection | `Shift+2` |
+| Zoom to 100% | `Shift+0` |
+| Pan | `Space+drag`, right-drag, or drag inside the preview card |
+
+### The Right-Click Menu
+
+Right-click an object for its context menu: clipboard actions, layer order (bring/send), flips, round-to-pixel and variant stacks. Right-click empty canvas for paste, select all, zoom presets and grid/ruler toggles. (A right-*drag* pans instead — the menu only opens on a clean click.)
+
+![The right-click context menu on a selected object](assets/img/context-menu.png)
+*Right-clicking an object: every entry mirrors its menu twin, shortcuts included.*
+
+### Arrange Tools
+
+- **Align** left / horizontal centers / right / top / vertical centers / bottom — Figma semantics: several selected objects align to the bounds of the whole selection; a single object aligns to the watch screen itself (e.g. *Align horizontal centers* centers it on the dial).
+- **Distribute** horizontal or vertical spacing evenly (outermost objects stay put).
+- **Distribute around circle…** spreads the selected objects evenly on the ring they already sit on. **Duplicate around circle…** turns one object into 12/24/60 copies around the dial — instant tick marks.
+- **Bring forward / send backward** (`Alt+↑/↓`) and **to front / to back** (`Alt+Shift+↑/↓`) control stacking; the layer list shows the order and supports drag-reordering.
+- **Flip horizontal/vertical** (`Shift+H/V`) — static shapes and images only; data-driven objects can't be mirrored.
+
+![The Arrange menu](assets/img/menu-arrange.png)
+*The Arrange menu: align, distribute, layer order, circular layouts, flips and variant stacks.*
+
+### Data Fields in the Editor
+
+Data fields behave slightly differently from static shapes — by design:
+
+- They **cannot be scaled or rotated** with the corner handles (their size comes from the **font size** in the properties panel). This also applies inside a multi-selection: if any member is a data field, the selection loses its resize/rotate handles and the *same size / width / height* buttons are disabled.
+- They **cannot be flipped** — flip is for static shapes and images only.
+- In the layer list and in the **Browse all data fields** catalog, a green **certificate** badge marks [premium](#premium-membership) fields and the orange **OWM** logo marks fields that require an [OpenWeatherMap API key](#api-keys--weather-data).
+- Use **preview data values** (View menu) to test your layout against extreme values — see the next section.
+
+### Variant Stacks (show one of several overlapping fields)
+
+Many designs place several data fields **on top of each other** and use visibility expressions so only one renders at runtime (e.g. an app-property dropdown choosing which metric to show). In the editor that used to be a pile of overlapping objects. Select the overlapping fields and press **`Ctrl+G`** (Arrange → *Stack variants*):
+
+- Only **one variant shows at a time** in the editor — click a hidden member's eye or row in the layer list to switch which one.
+- Members **move together** — drag, nudge or align one and the whole stack follows.
+- Each stack gets a **color chip and number** in the layer list so different stacks are easy to tell apart.
+- **`Ctrl+Shift+G`** unstacks (all members visible again). Stacks are an editor-only convenience — the objects stay individual top-level objects in the build, and your runtime visibility expressions are untouched.
+
+### Power Modes & Data Preview
+
+- The **View menu** (or keys `1`–`4`) previews which objects are visible in *all objects / high power / low power–AOD / do-not-disturb* modes, driven by each object's visibility setting. A **custom expression** option previews exactly the objects whose visibility expression matches what you type.
+- **Preview data values** switches every data field between *live* random samples, *maximum/longest* and *minimum/shortest* values — the fastest way to check that your layout survives `88888` steps or a `-88°` temperature. Preview-only; nothing is saved.
+- The footer's **watch overlay** draws the physical watch body around the screen, and **clip preview** crops the canvas to the real screen shape so you see exactly what a round bezel will cut off.
+- On supported AMOLED devices, **File → Estimate AOD pixels** checks your low-power layout against Garmin's always-on pixel budget (see [MIP Display Issues](#mip-display-issues)).
+
+![The View menu](assets/img/menu-view.png)
+*The View menu: power-mode filter, preview data values, custom expression preview, zoom presets.*
+
+### History & Clipboard
+
+- Undo/redo (`Ctrl+Z` / `Ctrl+Shift+Z`, up to 50 steps) with **named entries** in the History panel below the layer list — click any entry to jump back. Multi-step operations (align, radial layout, stacking) undo as a single step, and typing in the properties panel coalesces into one entry instead of fifty.
+- Premium: the **Timeline** in the same panel stores a version every time you build, so you can restore an earlier built state.
+- `Ctrl+C` / `Ctrl+V` copies objects **across browser tabs and designs**; paste lands at your cursor when it's over the canvas, offset-cascades when it isn't.
+- `Ctrl+D` duplicates in place; **Alt+drag** clones while dragging.
+
+### Working on Mobile
+
+On a phone or narrow window the side panels collapse: the two buttons at the right end of the toolbar toggle the **layer list** and the **properties panel**, and tapping the canvas closes whichever panel is open so the design is never trapped behind UI.
 
 ---
 
@@ -756,7 +924,7 @@ WFB is specifically a **watch face** builder. It does not currently support buil
 
 ### Copy/Paste Between Watch Faces
 
-Copying objects between two different watch face designs is a supported feature, but users have reported a bug where copy works (you see "selected object(s) copied to clipboard") but pasting into a different watch face shows "no object selected" and nothing happens. If you encounter this, try: refreshing both editor tabs, ensuring you're using the same editor version (legacy or new) for both, or as a workaround, manually recreate the objects in the target design.
+Copying objects between two different watch face designs is supported: in the current editor, `Ctrl+C` / `Ctrl+V` works **across browser tabs and across designs** (objects travel via a portable clipboard format, and pasted objects get fresh internal IDs). The historical "copy works but paste says *no object selected*" bug applied to the **legacy editor** — if you still hit it, make sure both tabs run the new editor, or refresh both tabs.
 
 ### PRG File Size Anomalies
 
@@ -946,14 +1114,58 @@ A common concern for new users is how WFB handles personal data. The WFB team ha
 
 ## Keyboard & Mouse Shortcuts
 
-The WFB Builder supports several keyboard and mouse shortcuts to speed up design work. These were documented in a pinned post by the moderators:
+Press **Shift+?** inside the editor for the built-in, always-current shortcut panel. Full reference (Ctrl = Cmd on macOS):
 
-- **Arrow keys** — Nudge selected object by 1 pixel
-- **Delete/Backspace** — Delete selected object
-- **Ctrl+C / Ctrl+V** — Copy/paste objects (also works between watch faces, though a bug may prevent cross-face paste — see Known Limitations)
-- **Mouse wheel** — Zoom in/out on the canvas
-- **Click + drag** — Move objects on the canvas
-- Check the pinned post on r/watchfacebuilder titled "WFB Builder Keyboard/Mouse shortcut" for the complete and most up-to-date list.
+### Essentials
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl+Z` / `Ctrl+Shift+Z` (or `Ctrl+Y`) | Undo / redo |
+| `Ctrl+S` | Save snapshot (premium) |
+| `Ctrl+B` | Save & build watchface |
+| `Del` / `Backspace` | Delete selection |
+| `Shift+?` | Shortcut panel |
+
+### Select
+
+| Shortcut | Action |
+|---|---|
+| Click | Select object |
+| `Shift+click` / `Ctrl+click` | Add / remove from selection (canvas & layer list) |
+| Drag on empty canvas | Marquee select — with `Shift`, adds to the selection |
+| `Ctrl+A` / `Esc` | Select all / deselect |
+| Right-click | Context menu for the object (or canvas) under the cursor |
+
+### Edit & Move
+
+| Shortcut | Action |
+|---|---|
+| `Ctrl+C` / `Ctrl+V` | Copy / paste (works across tabs; pastes at cursor) |
+| `Ctrl+D` | Duplicate |
+| `Alt+drag` | Clone while dragging |
+| Arrows / `Shift+arrows` | Nudge 1 px / 10 px |
+| `Shift+drag` | Constrain drag to one axis |
+| Hold `Alt` while dragging | Bypass snapping |
+| `Shift+H` / `Shift+V` | Flip horizontal / vertical (static objects) |
+
+### Arrange
+
+| Shortcut | Action |
+|---|---|
+| `Alt+↑` / `Alt+↓` | Bring forward / send backward |
+| `Alt+Shift+↑` / `Alt+Shift+↓` | Bring to front / send to back |
+| `Ctrl+G` / `Ctrl+Shift+G` | Stack variants (show one) / unstack |
+
+### View
+
+| Shortcut | Action |
+|---|---|
+| Mouse wheel | Zoom at cursor |
+| `Shift+1` / `Shift+2` / `Shift+0` | Zoom to fit / to selection / to 100% |
+| `Space+drag` or right-drag | Pan the canvas |
+| `G` / `U` | Toggle grid / rulers |
+| `Alt+hover` | Measure distances from the selection |
+| `1` `2` `3` `4` | Preview: all objects / high power / low power–AOD / DND |
 
 ---
 
@@ -963,7 +1175,7 @@ The WFB Builder supports several keyboard and mouse shortcuts to speed up design
 - **How to Remove Sideloaded PRG Files** (pinned post) — Instructions on r/watchfacebuilder for properly removing watch faces installed via USB.
 - **Apps in ConnectIQ Store Created by WFB** (pinned post) — A curated list of watch faces on the Garmin store that were built using WFB, useful for inspiration.
 - **Unofficial Community Wiki (Gitea):** [code.binbash.rocks — WFB Wiki](https://code.binbash.rocks:8443/GarminWatch/watchfacebuilder/wiki) — Detailed community-maintained documentation covering battery optimization, memory optimization, useful functions, ConnectIQ publishing tips, and FAQ.
-- **Official Help Guide:** [garmin.watchfacebuilder.com/garmin-device-app-online-builder-help](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/) — Builder UI reference (widgets, palettes, the Widgets panel, math expressions, the Save & Build / Open buttons).
+- **Official Help Guide:** [garmin.watchfacebuilder.com/garmin-device-app-online-builder-help](https://garmin.watchfacebuilder.com/garmin-device-app-online-builder-help/) — the original Builder UI reference (written for the legacy editor: widgets, palettes, math expressions, Save & Build / Open). For the current editor, see [The Editor](#the-editor) on this page.
 - **Changelog** — Linked from the top menu on [garmin.watchfacebuilder.com](https://garmin.watchfacebuilder.com). Use this to check whether a recent build issue you're hitting is related to a recent WFB change.
 - **Website:** [garmin.watchfacebuilder.com](https://garmin.watchfacebuilder.com)
 - **Reddit:** [r/watchfacebuilder](https://www.reddit.com/r/watchfacebuilder)
@@ -986,6 +1198,6 @@ The WFB Builder supports several keyboard and mouse shortcuts to speed up design
 
 ---
 
-*This wiki was compiled from community discussions on r/watchfacebuilder (including the developer's sticky posts and Q&A threads) and the official WFB website. Last updated: 2026-05-11.*
+*This wiki was compiled from community discussions on r/watchfacebuilder (including the developer's sticky posts and Q&A threads) and the official WFB website. Last updated: 2026-07-04.*
 
 *Edit this page on GitHub: [docs/index.md](https://github.com/joshuahxh/wfbInstaller/edit/main/docs/index.md) — pull requests welcome.*

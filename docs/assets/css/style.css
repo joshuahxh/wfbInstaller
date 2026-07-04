@@ -356,6 +356,16 @@ article.page img {
   max-width: 100%;
   height: auto;
   border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+/* screenshot captions: the emphasized line directly under an image */
+article.page img + em,
+article.page p > img + br + em {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--text-muted, #9aa0ab);
 }
 
 /* ── Footer ────────────────────────────────────────────────────────────── */
